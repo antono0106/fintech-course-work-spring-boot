@@ -7,13 +7,13 @@ import javax.persistence.Entity;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "movie")
+@Table(name = "ticket_statuses")
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
 @ToString
-public class MovieEntity extends AbstractEntity {
-    @Column(name = "name", unique = true, nullable = false)
+public class TicketStatusEntity extends AbstractEntity {
+    @Column(name = "name", nullable = false)
     private String name;
 }

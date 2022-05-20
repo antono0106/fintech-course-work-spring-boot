@@ -3,16 +3,17 @@ package com.moroz.persistence.entities;
 import lombok.*;
 
 import javax.persistence.*;
+import javax.persistence.Entity;
 import java.time.LocalTime;
 
-@javax.persistence.Entity
+@Entity
 @Table(name = "movie_show")
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
 @ToString
-public class MovieShowEntity extends AbstractEntity implements com.moroz.persistence.entities.Entity {
+public class MovieShowEntity extends AbstractEntity {
     @ManyToOne
     @JoinColumn(name = "cinema_id")
     private CinemaEntity cinemaEntity;

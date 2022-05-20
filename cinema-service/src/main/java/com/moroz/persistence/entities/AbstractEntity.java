@@ -1,7 +1,6 @@
 package com.moroz.persistence.entities;
 
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 import javax.persistence.GeneratedValue;
@@ -11,7 +10,7 @@ import javax.persistence.MappedSuperclass;
 
 @MappedSuperclass
 @ToString
-public abstract class AbstractEntity implements com.moroz.persistence.entities.Entity {
+public abstract class AbstractEntity {
     @Getter
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

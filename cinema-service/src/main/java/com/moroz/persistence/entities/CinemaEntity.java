@@ -13,7 +13,7 @@ import javax.persistence.Table;
 @ToString
 @Getter
 @Setter
-public class CinemaEntity extends AbstractEntity implements com.moroz.persistence.entities.Entity {
+public class CinemaEntity extends AbstractEntity {
     @Column(name = "name", nullable = false, unique = true)
     private String name;
 
