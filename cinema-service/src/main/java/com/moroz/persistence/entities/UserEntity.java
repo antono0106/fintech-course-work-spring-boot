@@ -10,6 +10,7 @@ import javax.persistence.Entity;
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
+@EqualsAndHashCode
 @ToString
 public class UserEntity  {
 

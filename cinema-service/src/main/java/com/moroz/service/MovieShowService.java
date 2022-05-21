@@ -1,13 +1,16 @@
 package com.moroz.service;
 
+import com.moroz.exceptions.CinemaNotFoundException;
 import com.moroz.exceptions.MovieShowNotFoundException;
 import com.moroz.model.CinemaDTO;
 import com.moroz.model.MovieShowDTO;
 import com.moroz.parsers.MovieShowEntityToDTOParser;
 import com.moroz.persistence.entities.CinemaEntity;
+import com.moroz.persistence.entities.MovieEntity;
 import com.moroz.persistence.entities.MovieShowEntity;
 import com.moroz.persistence.repo.MovieShowRepository;
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -26,6 +29,10 @@ public class MovieShowService {
 
     private final MovieService movieService;
     private final CinemaService cinemaService;
+
+    protected MovieShowRepository getMovieShowRepository() {
+        return movieShowRepository;
+    }
 
     public List<MovieShowDTO> getMovieShows() {
         List<MovieShowEntity> entities = movieShowRepository.findAll();
@@ -49,5 +56,25 @@ public class MovieShowService {
         return MovieShowEntityToDTOParser.parse(entity);
     }
 
+    public MovieShowDTO addMovieShow(String cinemaName, String movieName, LocalTime time, int price) {
+        CinemaEntity cinemaEntity = cinemaService.getCinemaRepository().getCinemaEntityByName(cinemaName)
+                .orElseThrow(CinemaNotFoundException::new);
+
+        MovieEntity movieEntity = movieService.getMovieRepository().getMovieEntityByName(movieName)
+                .orElseThrow(MovieShowNotFoundException::new);
+
+        MovieShowEntity movieShowEntity = new MovieShowEntity(cinemaEntity, movieEntity, time, price);
+
+        movieShowRepository.save(movieShowEntity);
+
+        log.info("Saved " + movieShowEntity);
+
+        return MovieShowEntityToDTOParser.parse(movieShowEntity);
+    }
+
+    public void deleteMovieShowById(Long id) {
+        movieShowRepository.deleteById(id);
+        log.info("Deleted movie show by id " + id);
+    }
 
 }

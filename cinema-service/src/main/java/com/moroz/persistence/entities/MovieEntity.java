@@ -10,9 +10,7 @@ import javax.persistence.Table;
 @Table(name = "movie")
 @AllArgsConstructor
 @NoArgsConstructor
-@Getter
-@Setter
-@ToString
+@Data
 public class MovieEntity extends AbstractEntity {
     @Column(name = "name", unique = true, nullable = false)
     private String name;

@@ -10,9 +10,7 @@ import java.time.LocalTime;
 @Table(name = "movie_show")
 @AllArgsConstructor
 @NoArgsConstructor
-@Getter
-@Setter
-@ToString
+@Data
 public class MovieShowEntity extends AbstractEntity {
     @ManyToOne
     @JoinColumn(name = "cinema_id")

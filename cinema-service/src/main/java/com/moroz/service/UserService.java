@@ -6,6 +6,7 @@ import com.moroz.parsers.UserEntityToDTOParser;
 import com.moroz.persistence.entities.UserEntity;
 import com.moroz.persistence.repo.UserRepository;
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -20,6 +21,7 @@ import java.util.regex.Pattern;
 @AllArgsConstructor
 public class UserService {
 
+    @Getter
     private final UserRepository userRepository;
 
     private final Pattern phoneNumberPattern = Pattern.compile("^(?:\\+38)?(0\\d{9})$");

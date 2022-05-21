@@ -6,6 +6,7 @@ import com.moroz.parsers.MovieEntityToDTOParser;
 import com.moroz.persistence.entities.MovieEntity;
 import com.moroz.persistence.repo.MovieRepository;
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -20,6 +21,10 @@ import java.util.List;
 public class MovieService {
 
     private MovieRepository movieRepository;
+
+    protected MovieRepository getMovieRepository() {
+        return movieRepository;
+    }
 
     public List<MovieDTO> getMovies() {
         List<MovieEntity> entities = movieRepository.findAll();

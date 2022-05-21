@@ -8,6 +8,7 @@ import com.moroz.persistence.entities.CinemaEntity;
 import com.moroz.persistence.entities.MovieEntity;
 import com.moroz.persistence.repo.CinemaRepository;
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -22,6 +23,10 @@ import java.util.List;
 public class CinemaService {
 
     private CinemaRepository cinemaRepository;
+
+    protected CinemaRepository getCinemaRepository() {
+        return cinemaRepository;
+    }
 
     public List<CinemaDTO> getCinemas() {
         List<CinemaEntity> entities = cinemaRepository.findAll();
