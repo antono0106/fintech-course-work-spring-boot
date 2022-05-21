@@ -56,7 +56,7 @@ public class MovieShowService {
         return MovieShowEntityToDTOParser.parse(entity);
     }
 
-    public MovieShowDTO addMovieShow(String cinemaName, String movieName, LocalTime time, int price) {
+    public MovieShowDTO createMovieShow(String cinemaName, String movieName, LocalTime time, int price) {
         CinemaEntity cinemaEntity = cinemaService.getCinemaRepository().getCinemaEntityByName(cinemaName)
                 .orElseThrow(CinemaNotFoundException::new);
 

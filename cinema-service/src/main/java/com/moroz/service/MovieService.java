@@ -56,7 +56,7 @@ public class MovieService {
         return MovieEntityToDTOParser.parse(entity);
     }
 
-    public MovieDTO addMovie(String name) {
+    public MovieDTO createMovie(String name) {
         MovieEntity entity = new MovieEntity(name);
 
         movieRepository.save(entity);

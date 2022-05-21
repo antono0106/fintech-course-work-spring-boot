@@ -59,8 +59,18 @@ public class CinemaService {
         return CinemaEntityToDTOParser.parse(entity);
     }
 
-    public CinemaDTO addCinema(String name) {
+    public CinemaDTO createCinema(String name) {
         CinemaEntity entity = new CinemaEntity(name);
+
+        cinemaRepository.save(entity);
+
+        log.info("Saved " + entity);
+
+        return CinemaEntityToDTOParser.parse(entity);
+    }
+
+    public CinemaDTO createCinema(String name, int rowAmount, int placesPerRowAmount) {
+        CinemaEntity entity = new CinemaEntity(name, rowAmount, placesPerRowAmount);
 
         cinemaRepository.save(entity);
 
