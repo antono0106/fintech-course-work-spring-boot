@@ -1,6 +1,6 @@
 package com.moroz.persistence.entities;
 
-import com.moroz.persistence.enums.TicketStatuses;
+import com.moroz.persistence.enums.TicketStatus;
 import lombok.*;
 
 import javax.persistence.*;
@@ -24,7 +24,7 @@ public class TicketEntity {
     private int place;
 
     @Column(name = "status_id", nullable = false)
-    private TicketStatuses ticketStatus;
+    private TicketStatus ticketStatus;
 
     @Column(name = "creation_date", nullable = false)
     private LocalDateTime creationDate;
@@ -39,7 +39,7 @@ public class TicketEntity {
         this.movieShowEntity = movieShowEntity;
         this.row = row;
         this.place = place;
-        this.ticketStatus = TicketStatuses.NEW;
+        this.ticketStatus = TicketStatus.NEW;
         this.creationDate = LocalDateTime.now();
         this.modificationDate = LocalDateTime.now();
         this.paymentId = null;

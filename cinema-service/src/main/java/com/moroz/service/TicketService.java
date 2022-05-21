@@ -7,12 +7,14 @@ import com.moroz.model.TicketDTO;
 import com.moroz.parsers.TicketEntityToDTOParser;
 import com.moroz.persistence.entities.MovieShowEntity;
 import com.moroz.persistence.entities.TicketEntity;
+import com.moroz.persistence.enums.TicketStatus;
 import com.moroz.persistence.repo.TicketRepository;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -40,6 +42,17 @@ public class TicketService {
         return dtoList;
     }
 
+    public List<TicketDTO> getTicketsByStatus(TicketStatus ticketStatus) {
+        List<TicketEntity> entities = ticketRepository.findAllByTicketStatus(ticketStatus);
+
+        List<TicketDTO> dtoList = new ArrayList<>();
+
+        entities.forEach(x -> dtoList.add(new TicketDTO(x.getMovieShowEntity().getId(), x.getRow(), x.getPlace(),
+                x.getTicketStatus().getId(), x.getCreationDate(), x.getModificationDate(), x.getPaymentId())));
+
+        return dtoList;
+    }
+
     public TicketDTO getTicketById(Long id) {
         TicketEntity entity = ticketRepository.findById(id)
                 .orElseThrow(TicketNotFoundException::new);
@@ -48,7 +61,6 @@ public class TicketService {
 
         return TicketEntityToDTOParser.parse(entity);
     }
-
 
     public TicketDTO addTicket(Long movieShowId, int row, int place) {
         MovieShowEntity movieShowEntity = movieShowService.getMovieShowRepository().findById(movieShowId)
@@ -70,18 +82,25 @@ public class TicketService {
         return TicketEntityToDTOParser.parse(ticketEntity);
     }
 
-    public TicketDTO updateTicket(Long movieShowId, int row, int place, ) {
+    public TicketDTO updateTicket(Long movieShowId, int row, int place, TicketStatus ticketStatus) {
         MovieShowEntity movieShowEntity = movieShowService.getMovieShowRepository().findById(movieShowId)
                 .orElseThrow(MovieShowNotFoundException::new);
 
         TicketEntity ticketEntity = ticketRepository.findByMovieShowEntityAndRowAndPlace(movieShowEntity, row, place)
                 .orElseThrow(TicketNotFoundException::new);
 
-        ticketRepository.insertTicket(ticketEntity.getMovieShowEntity().getId(),
-                ticketEntity.getRow(), ticketEntity.getPlace());
+        ticketEntity.setTicketStatus(ticketStatus);
+        ticketEntity.setModificationDate(LocalDateTime.now());
 
-        log.info("Saved " + ticketEntity);
+        ticketRepository.save(ticketEntity);
+
+        log.info("Updated " + ticketEntity);
 
         return TicketEntityToDTOParser.parse(ticketEntity);
+    }
+
+    public void deleteTicketById(Long id) {
+        ticketRepository.deleteById(id);
+        log.info("Deleted ticket by id " + id);
     }
 }

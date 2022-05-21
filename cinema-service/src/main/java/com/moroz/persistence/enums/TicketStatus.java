@@ -1,15 +1,15 @@
 package com.moroz.persistence.enums;
 
-public enum TicketStatuses {
+public enum TicketStatus {
     NEW(1L, "NEW"),
     PROCESSING(2L, "PROCESSING"),
     DONE(3L, "DONE"),
     FAILED(4L, "FAILED");
 
-    private Long id;
-    private String name;
+    private final Long id;
+    private final String name;
 
-    TicketStatuses(Long id, String name) {
+    TicketStatus(Long id, String name) {
         this.id = id;
         this.name = name;
     }
