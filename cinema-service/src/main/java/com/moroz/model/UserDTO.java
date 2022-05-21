@@ -13,5 +13,5 @@ public class UserDTO {
 
     private String fullName;
 
-    private String emailOrPhoneNumber;
+    private String emailPhoneNumber;
 }

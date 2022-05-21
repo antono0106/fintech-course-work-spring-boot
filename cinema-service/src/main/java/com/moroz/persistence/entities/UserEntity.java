@@ -19,5 +19,5 @@ public class UserEntity  {
 
     @Id
     @Column(name = "email_or_phone_number", nullable = false)
-    private String emailOrPhoneNumber;
+    private String emailPhoneNumber;
 }

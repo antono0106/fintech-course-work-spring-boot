@@ -9,7 +9,6 @@ import lombok.ToString;
 import java.time.LocalDateTime;
 
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
 @ToString
 public class TicketDTO {
