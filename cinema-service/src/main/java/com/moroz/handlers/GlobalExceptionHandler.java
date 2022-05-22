@@ -21,7 +21,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(Exception.class)
     public final ResponseEntity<ErrorResponse> handleAllExceptions(Exception ex, WebRequest request) {
         List<String> details = new ArrayList<>();
-        details.add(ex.getLocalizedMessage());
+        details.add(ex.getMessage());
         ErrorResponse error = new ErrorResponse("SERVER_ERROR", details);
         log.error("Handled exception", ex);
         return new ResponseEntity<>(error, HttpStatus.INTERNAL_SERVER_ERROR);
@@ -31,7 +31,7 @@ public class GlobalExceptionHandler {
     public final ResponseEntity<ErrorResponse> handleUserNotFoundException(UserNotFoundException ex,
                                                                            WebRequest request) {
         List<String> details = new ArrayList<>();
-        details.add(ex.getLocalizedMessage());
+        details.add(ex.getMessage());
         ErrorResponse error = new ErrorResponse("RECORD_NOT_FOUND", details);
         log.error("Handled exception", ex);
         return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
@@ -41,7 +41,7 @@ public class GlobalExceptionHandler {
     public final ResponseEntity<ErrorResponse> handleUserNotFoundException(MovieNotFoundException ex,
                                                                            WebRequest request) {
         List<String> details = new ArrayList<>();
-        details.add(ex.getLocalizedMessage());
+        details.add(ex.getMessage());
         ErrorResponse error = new ErrorResponse("RECORD_NOT_FOUND", details);
         log.error("Handled exception", ex);
         return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
@@ -51,7 +51,7 @@ public class GlobalExceptionHandler {
     public final ResponseEntity<ErrorResponse> handleUserNotFoundException(CinemaNotFoundException ex,
                                                                            WebRequest request) {
         List<String> details = new ArrayList<>();
-        details.add(ex.getLocalizedMessage());
+        details.add(ex.getMessage());
         ErrorResponse error = new ErrorResponse("RECORD_NOT_FOUND", details);
         log.error("Handled exception", ex);
         return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
@@ -61,7 +61,7 @@ public class GlobalExceptionHandler {
     public final ResponseEntity<ErrorResponse> handleUserNotFoundException(MovieShowNotFoundException ex,
                                                                            WebRequest request) {
         List<String> details = new ArrayList<>();
-        details.add(ex.getLocalizedMessage());
+        details.add(ex.getMessage());
         ErrorResponse error = new ErrorResponse("RECORD_NOT_FOUND", details);
         log.error("Handled exception", ex);
         return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
@@ -71,7 +71,7 @@ public class GlobalExceptionHandler {
     public final ResponseEntity<ErrorResponse> handleUserNotFoundException(TicketNotFoundException ex,
                                                                            WebRequest request) {
         List<String> details = new ArrayList<>();
-        details.add(ex.getLocalizedMessage());
+        details.add(ex.getMessage());
         ErrorResponse error = new ErrorResponse("RECORD_NOT_FOUND", details);
         log.error("Handled exception", ex);
         return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
@@ -81,7 +81,7 @@ public class GlobalExceptionHandler {
     public final ResponseEntity<ErrorResponse> handleUserNotFoundException(OccupiedRowAndPlaceException ex,
                                                                            WebRequest request) {
         List<String> details = new ArrayList<>();
-        details.add(ex.getLocalizedMessage());
+        details.add(ex.getMessage());
         ErrorResponse error = new ErrorResponse("RECORD_NOT_FOUND", details);
         log.error("Handled exception", ex);
         return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);

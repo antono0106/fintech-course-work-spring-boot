@@ -1,5 +1,6 @@
 package com.moroz.service;
 
+import com.moroz.exceptions.CinemaNotFoundException;
 import com.moroz.exceptions.MovieNotFoundException;
 import com.moroz.model.MovieDTO;
 import com.moroz.parsers.MovieEntityToDTOParser;
@@ -76,7 +77,7 @@ public class MovieService {
 
     public void deleteMovieById(Long id) {
         MovieEntity entity = movieRepository.findById(id)
-                .orElseThrow(MovieNotFoundException::new);
+                .orElseThrow(() -> new MovieNotFoundException("Movie not found"));
 
         movieRepository.delete(entity);
         log.info("Deleted entity " + entity);

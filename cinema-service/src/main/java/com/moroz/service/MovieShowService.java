@@ -90,7 +90,9 @@ public class MovieShowService {
     }
 
     public void deleteMovieShowById(Long id) {
-        movieShowRepository.deleteById(id);
+        MovieShowEntity entity = movieShowRepository.findById(id)
+                .orElseThrow(() -> new MovieShowNotFoundException("Movie show not found"));
+        movieShowRepository.delete(entity);
         log.info("Deleted movie show by id " + id);
     }
 

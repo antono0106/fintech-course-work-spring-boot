@@ -1,11 +1,9 @@
 package com.moroz.service;
 
-import com.moroz.exceptions.CinemaNotFoundException;
-import com.moroz.exceptions.MovieShowNotFoundException;
-import com.moroz.exceptions.OccupiedRowAndPlaceException;
-import com.moroz.exceptions.TicketNotFoundException;
+import com.moroz.exceptions.*;
 import com.moroz.model.TicketDTO;
 import com.moroz.parsers.TicketEntityToDTOParser;
+import com.moroz.persistence.entities.MovieEntity;
 import com.moroz.persistence.entities.MovieShowEntity;
 import com.moroz.persistence.entities.TicketEntity;
 import com.moroz.persistence.enums.TicketStatus;
@@ -101,7 +99,9 @@ public class TicketService {
     }
 
     public void deleteTicketById(Long id) {
-        ticketRepository.deleteById(id);
+        TicketEntity entity = ticketRepository.findById(id)
+                .orElseThrow(() -> new TicketNotFoundException("Ticket not found"));
+        ticketRepository.delete(entity);
         log.info("Deleted ticket by id " + id);
     }
 }
