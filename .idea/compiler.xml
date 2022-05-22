@@ -20,10 +20,10 @@
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
-      <module name="cinema-service" options="-parameters --add-modules java.base" />
+      <module name="cinema-service" options="-parameters" />
       <module name="fintech-cinema-service" options="-parameters" />
       <module name="fintech-payment-service" options="-parameters" />
-      <module name="payment-service" options="-parameters --add-modules java.base" />
+      <module name="payment-service" options="-parameters" />
     </option>
   </component>
 </project>

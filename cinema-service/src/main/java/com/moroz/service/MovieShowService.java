@@ -72,6 +72,22 @@ public class MovieShowService {
         return MovieShowEntityToDTOParser.parse(movieShowEntity);
     }
 
+    public MovieShowDTO createMovieShow(Long cinemaId, Long movieId, LocalTime time, int price) {
+        CinemaEntity cinemaEntity = cinemaService.getCinemaRepository().findById(cinemaId)
+                .orElseThrow(CinemaNotFoundException::new);
+
+        MovieEntity movieEntity = movieService.getMovieRepository().findById(movieId)
+                .orElseThrow(MovieShowNotFoundException::new);
+
+        MovieShowEntity movieShowEntity = new MovieShowEntity(cinemaEntity, movieEntity, time, price);
+
+        movieShowRepository.save(movieShowEntity);
+
+        log.info("Saved " + movieShowEntity);
+
+        return MovieShowEntityToDTOParser.parse(movieShowEntity);
+    }
+
     public void deleteMovieShowById(Long id) {
         movieShowRepository.deleteById(id);
         log.info("Deleted movie show by id " + id);

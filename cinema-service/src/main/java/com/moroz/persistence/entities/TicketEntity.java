@@ -1,7 +1,9 @@
 package com.moroz.persistence.entities;
 
 import com.moroz.persistence.enums.TicketStatus;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -11,8 +13,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-public class TicketEntity {
-    @Id
+public class TicketEntity extends AbstractEntity {
     @ManyToOne
     @JoinColumn(name = "movie_show_id")
     private MovieShowEntity movieShowEntity;

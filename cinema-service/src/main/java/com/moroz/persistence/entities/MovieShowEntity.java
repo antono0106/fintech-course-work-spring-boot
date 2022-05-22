@@ -4,6 +4,7 @@ import lombok.*;
 
 import javax.persistence.*;
 import javax.persistence.Entity;
+import java.io.Serializable;
 import java.time.LocalTime;
 
 @Entity
@@ -11,7 +12,7 @@ import java.time.LocalTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-public class MovieShowEntity extends AbstractEntity {
+public class MovieShowEntity extends AbstractEntity implements Serializable {
     @ManyToOne
     @JoinColumn(name = "cinema_id")
     private CinemaEntity cinemaEntity;
