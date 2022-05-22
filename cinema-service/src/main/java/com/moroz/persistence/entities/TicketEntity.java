@@ -11,15 +11,10 @@ import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "ticket")
+@AllArgsConstructor
 @NoArgsConstructor
 @Data
-public class TicketEntity {
-
-    @Getter
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "t_id")
-    private Long tId;
+public class TicketEntity extends AbstractEntity {
 
     @ManyToOne
     @JoinColumn(name = "movie_show_id")
@@ -42,16 +37,6 @@ public class TicketEntity {
 
     @Column(name = "payment_id")
     private Long paymentId;
-
-    public TicketEntity(MovieShowEntity movieShowEntity, int row, int place, TicketStatus ticketStatus, LocalDateTime creationDate, LocalDateTime modificationDate, Long paymentId) {
-        this.movieShowEntity = movieShowEntity;
-        this.row = row;
-        this.place = place;
-        this.ticketStatus = ticketStatus;
-        this.creationDate = creationDate;
-        this.modificationDate = modificationDate;
-        this.paymentId = paymentId;
-    }
 
     public TicketEntity(MovieShowEntity movieShowEntity, int row, int place) {
         this.movieShowEntity = movieShowEntity;

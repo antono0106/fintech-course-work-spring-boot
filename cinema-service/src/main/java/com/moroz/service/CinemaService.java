@@ -43,7 +43,7 @@ public class CinemaService {
 
     public CinemaDTO getCinemaById(Long id) {
         CinemaEntity entity = cinemaRepository.findById(id)
-                .orElseThrow(CinemaNotFoundException::new);
+                .orElseThrow(() -> new CinemaNotFoundException("Cinema not found"));
 
         log.info("Found entity by id " + entity);
 
@@ -52,7 +52,7 @@ public class CinemaService {
 
     public CinemaDTO getCinemaByName(String name) {
         CinemaEntity entity = cinemaRepository.getCinemaEntityByName(name)
-                .orElseThrow(CinemaNotFoundException::new);
+                .orElseThrow(() -> new CinemaNotFoundException("Cinema not found"));
 
         log.info("Found entity by id " + entity);
 
@@ -81,7 +81,7 @@ public class CinemaService {
 
     public void deleteCinemaByName(String name) {
         CinemaEntity entity = cinemaRepository.getCinemaEntityByName(name)
-                .orElseThrow(CinemaNotFoundException::new);
+                .orElseThrow(() -> new CinemaNotFoundException("Cinema not found"));
 
         cinemaRepository.delete(entity);
 

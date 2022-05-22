@@ -1,6 +1,7 @@
 package com.moroz.service;
 
 import com.moroz.exceptions.CinemaNotFoundException;
+import com.moroz.exceptions.MovieNotFoundException;
 import com.moroz.exceptions.MovieShowNotFoundException;
 import com.moroz.model.CinemaDTO;
 import com.moroz.model.MovieShowDTO;
@@ -40,7 +41,7 @@ public class MovieShowService {
         List<MovieShowDTO> dtoList = new ArrayList<>();
 
         entities.forEach(x -> dtoList.add(new MovieShowDTO(x.getId(), x.getCinemaEntity().getId(),
-                x.getMovieEntity().getMId(), x.getTime(), x.getPrice())));
+                x.getMovieEntity().getId(), x.getTime(), x.getPrice())));
 
         log.info("Found all movie shows");
 
@@ -49,7 +50,7 @@ public class MovieShowService {
 
     public MovieShowDTO getMovieShowById(Long id) {
         MovieShowEntity entity = movieShowRepository.findById(id)
-                .orElseThrow(MovieShowNotFoundException::new);
+                .orElseThrow(() -> new MovieShowNotFoundException("Movie show not found"));
 
         log.info("Found " + entity);
 
@@ -58,10 +59,10 @@ public class MovieShowService {
 
     public MovieShowDTO createMovieShow(String cinemaName, String movieName, LocalTime time, int price) {
         CinemaEntity cinemaEntity = cinemaService.getCinemaRepository().getCinemaEntityByName(cinemaName)
-                .orElseThrow(CinemaNotFoundException::new);
+                .orElseThrow(() -> new CinemaNotFoundException("Cinema not found"));
 
         MovieEntity movieEntity = movieService.getMovieRepository().getMovieEntityByName(movieName)
-                .orElseThrow(MovieShowNotFoundException::new);
+                .orElseThrow(() -> new MovieNotFoundException("Movie not found"));
 
         MovieShowEntity movieShowEntity = new MovieShowEntity(cinemaEntity, movieEntity, time, price);
 
@@ -74,10 +75,10 @@ public class MovieShowService {
 
     public MovieShowDTO createMovieShow(Long cinemaId, Long movieId, LocalTime time, int price) {
         CinemaEntity cinemaEntity = cinemaService.getCinemaRepository().findById(cinemaId)
-                .orElseThrow(CinemaNotFoundException::new);
+                .orElseThrow(() -> new CinemaNotFoundException("Cinema not found"));
 
         MovieEntity movieEntity = movieService.getMovieRepository().findById(movieId)
-                .orElseThrow(MovieShowNotFoundException::new);
+                .orElseThrow(() -> new MovieNotFoundException("Movie not found"));
 
         MovieShowEntity movieShowEntity = new MovieShowEntity(cinemaEntity, movieEntity, time, price);
 

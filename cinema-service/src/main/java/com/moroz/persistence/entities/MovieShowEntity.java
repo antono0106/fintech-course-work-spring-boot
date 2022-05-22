@@ -2,7 +2,6 @@ package com.moroz.persistence.entities;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
@@ -13,13 +12,7 @@ import java.time.LocalTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-public class MovieShowEntity {
-
-    @Getter
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "ms_id")
-    private Long msId;
+public class MovieShowEntity extends AbstractEntity {
 
     @ManyToOne
     @JoinColumn(name = "cinema_id")
@@ -35,10 +28,4 @@ public class MovieShowEntity {
     @Column(name = "price", nullable = false)
     private int price;
 
-    public MovieShowEntity(CinemaEntity cinemaEntity, MovieEntity movieEntity, LocalTime time, int price) {
-        this.cinemaEntity = cinemaEntity;
-        this.movieEntity = movieEntity;
-        this.time = time;
-        this.price = price;
-    }
 }

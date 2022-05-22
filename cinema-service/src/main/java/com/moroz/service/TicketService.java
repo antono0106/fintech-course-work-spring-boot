@@ -1,5 +1,6 @@
 package com.moroz.service;
 
+import com.moroz.exceptions.CinemaNotFoundException;
 import com.moroz.exceptions.MovieShowNotFoundException;
 import com.moroz.exceptions.OccupiedRowAndPlaceException;
 import com.moroz.exceptions.TicketNotFoundException;
@@ -55,7 +56,7 @@ public class TicketService {
 
     public TicketDTO getTicketById(Long id) {
         TicketEntity entity = ticketRepository.findById(id)
-                .orElseThrow(TicketNotFoundException::new);
+                .orElseThrow(() -> new TicketNotFoundException("Ticket not found"));
 
         log.info("Found " + entity);
 
@@ -64,7 +65,7 @@ public class TicketService {
 
     public TicketDTO addTicket(Long movieShowId, int row, int place) {
         MovieShowEntity movieShowEntity = movieShowService.getMovieShowRepository().findById(movieShowId)
-                .orElseThrow(MovieShowNotFoundException::new);
+                .orElseThrow(() -> new MovieShowNotFoundException("Movie show not found"));
 
         TicketEntity ticketEntity = new TicketEntity(movieShowEntity, row, place);
 
@@ -84,10 +85,10 @@ public class TicketService {
 
     public TicketDTO updateTicket(Long movieShowId, int row, int place, TicketStatus ticketStatus) {
         MovieShowEntity movieShowEntity = movieShowService.getMovieShowRepository().findById(movieShowId)
-                .orElseThrow(MovieShowNotFoundException::new);
+                .orElseThrow(() -> new MovieShowNotFoundException("Movie Show not found"));
 
         TicketEntity ticketEntity = ticketRepository.findByMovieShowEntityAndRowAndPlace(movieShowEntity, row, place)
-                .orElseThrow(TicketNotFoundException::new);
+                .orElseThrow(() -> new TicketNotFoundException("Ticket not found"));
 
         ticketEntity.setTicketStatus(ticketStatus);
         ticketEntity.setModificationDate(LocalDateTime.now());

@@ -40,7 +40,7 @@ public class MovieService {
 
     public MovieDTO getMovieByName(String name) {
         MovieEntity entity = movieRepository.getMovieEntityByName(name)
-                .orElseThrow(MovieNotFoundException::new);
+                .orElseThrow(() -> new MovieNotFoundException("Movie not found"));
 
         log.info("Found entity by name " + entity);
 
@@ -49,7 +49,7 @@ public class MovieService {
 
     public MovieDTO getMovieById(Long id) {
         MovieEntity entity = movieRepository.findById(id)
-                .orElseThrow(MovieNotFoundException::new);
+                .orElseThrow(() -> new MovieNotFoundException("Movie not found"));
 
         log.info("Found entity by id " + entity);
 
@@ -68,7 +68,7 @@ public class MovieService {
 
     public void deleteMovieByName(String name) {
         MovieEntity entity = movieRepository.getMovieEntityByName(name)
-                .orElseThrow(MovieNotFoundException::new);
+                .orElseThrow(() -> new MovieNotFoundException("Movie not found"));
 
         movieRepository.delete(entity);
         log.info("Deleted entity " + entity);

@@ -1,5 +1,6 @@
 package com.moroz.service;
 
+import com.moroz.exceptions.CinemaNotFoundException;
 import com.moroz.exceptions.UserNotFoundException;
 import com.moroz.model.UserDTO;
 import com.moroz.parsers.UserEntityToDTOParser;
@@ -53,7 +54,7 @@ public class UserService {
 
     public UserDTO getUserByEmailPhoneNumber(String emailPhoneNumber) {
         UserEntity entity = userRepository.getUserEntityByEmailPhoneNumber(emailPhoneNumber)
-                .orElseThrow(UserNotFoundException::new);
+                .orElseThrow(() -> new UserNotFoundException("User not found"));
 
         log.info("Found :" + entity);
 
@@ -87,7 +88,7 @@ public class UserService {
         }
 
         UserEntity entity = userRepository.getUserEntityByEmailPhoneNumber(emailPhoneNumber)
-                .orElseThrow(UserNotFoundException::new);
+                .orElseThrow(() -> new UserNotFoundException("User not found"));
 
         userRepository.delete(entity);
         log.info("Deleted " + entity);

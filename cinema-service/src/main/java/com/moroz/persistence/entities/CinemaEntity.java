@@ -6,15 +6,10 @@ import javax.persistence.*;
 
 @Entity
 @Table(name = "cinema")
+@AllArgsConstructor
 @NoArgsConstructor
 @Data
-public class CinemaEntity {
-
-    @Getter
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "c_id")
-    private Long cId;
+public class CinemaEntity extends AbstractEntity {
 
     @Column(name = "name", nullable = false, unique = true)
     private String name;
@@ -24,12 +19,6 @@ public class CinemaEntity {
 
     @Column(name = "places_per_row_amount")
     private int placesPerRowAmount;
-
-    public CinemaEntity(String name, int rowsAmount, int placesPerRowAmount) {
-        this.name = name;
-        this.rowsAmount = rowsAmount;
-        this.placesPerRowAmount = placesPerRowAmount;
-    }
 
     public CinemaEntity(String name) {
         this.name = name;

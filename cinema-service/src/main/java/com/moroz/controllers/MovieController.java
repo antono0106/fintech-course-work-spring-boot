@@ -1,6 +1,6 @@
 package com.moroz.controllers;
 
-import com.moroz.exceptions.UserNotFoundException;
+import com.moroz.exceptions.MovieNotFoundException;
 import com.moroz.model.MovieDTO;
 import com.moroz.service.MovieService;
 import lombok.AllArgsConstructor;
@@ -29,12 +29,10 @@ public class MovieController {
     }
 
     @PostMapping(path = "/delete/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Long> deleteMovieById(@PathVariable(value = "id") Long id) {
-        try {
+    public ResponseEntity deleteMovieById(@PathVariable(value = "id") Long id) {
+
             movieService.deleteMovieById(id);
-            return new ResponseEntity<Long>(id, HttpStatus.OK);
-        } catch (UserNotFoundException e) {
-            return new ResponseEntity<Long>(id, HttpStatus.BAD_REQUEST);
-        }
+            return new ResponseEntity(id, HttpStatus.OK);
+
     }
 }
