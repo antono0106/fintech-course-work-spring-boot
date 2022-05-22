@@ -25,8 +25,8 @@ class MovieControllerTest {
     @MockBean
     private MovieController movieController; // mock the repository
 
-    @Autowired
-    private ObjectMapper objectMapper;
+    /*@Autowired
+    private ObjectMapper objectMapper;*/
 
     @Test
     void getMovies() {

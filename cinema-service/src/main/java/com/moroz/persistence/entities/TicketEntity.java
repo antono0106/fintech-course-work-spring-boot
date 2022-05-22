@@ -3,6 +3,7 @@ package com.moroz.persistence.entities;
 import com.moroz.persistence.enums.TicketStatus;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
@@ -10,10 +11,16 @@ import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "ticket")
-@AllArgsConstructor
 @NoArgsConstructor
 @Data
-public class TicketEntity extends AbstractEntity {
+public class TicketEntity {
+
+    @Getter
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "t_id")
+    private Long tId;
+
     @ManyToOne
     @JoinColumn(name = "movie_show_id")
     private MovieShowEntity movieShowEntity;
@@ -35,6 +42,16 @@ public class TicketEntity extends AbstractEntity {
 
     @Column(name = "payment_id")
     private Long paymentId;
+
+    public TicketEntity(MovieShowEntity movieShowEntity, int row, int place, TicketStatus ticketStatus, LocalDateTime creationDate, LocalDateTime modificationDate, Long paymentId) {
+        this.movieShowEntity = movieShowEntity;
+        this.row = row;
+        this.place = place;
+        this.ticketStatus = ticketStatus;
+        this.creationDate = creationDate;
+        this.modificationDate = modificationDate;
+        this.paymentId = paymentId;
+    }
 
     public TicketEntity(MovieShowEntity movieShowEntity, int row, int place) {
         this.movieShowEntity = movieShowEntity;

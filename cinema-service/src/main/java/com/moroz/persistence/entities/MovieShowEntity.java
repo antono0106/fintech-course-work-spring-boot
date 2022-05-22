@@ -1,10 +1,11 @@
 package com.moroz.persistence.entities;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import javax.persistence.Entity;
-import java.io.Serializable;
 import java.time.LocalTime;
 
 @Entity
@@ -12,7 +13,14 @@ import java.time.LocalTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-public class MovieShowEntity extends AbstractEntity implements Serializable {
+public class MovieShowEntity {
+
+    @Getter
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "ms_id")
+    private Long msId;
+
     @ManyToOne
     @JoinColumn(name = "cinema_id")
     private CinemaEntity cinemaEntity;
@@ -26,4 +34,11 @@ public class MovieShowEntity extends AbstractEntity implements Serializable {
 
     @Column(name = "price", nullable = false)
     private int price;
+
+    public MovieShowEntity(CinemaEntity cinemaEntity, MovieEntity movieEntity, LocalTime time, int price) {
+        this.cinemaEntity = cinemaEntity;
+        this.movieEntity = movieEntity;
+        this.time = time;
+        this.price = price;
+    }
 }

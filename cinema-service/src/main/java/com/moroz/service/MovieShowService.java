@@ -40,7 +40,7 @@ public class MovieShowService {
         List<MovieShowDTO> dtoList = new ArrayList<>();
 
         entities.forEach(x -> dtoList.add(new MovieShowDTO(x.getId(), x.getCinemaEntity().getId(),
-                x.getMovieEntity().getId(), x.getTime(), x.getPrice())));
+                x.getMovieEntity().getMId(), x.getTime(), x.getPrice())));
 
         log.info("Found all movie shows");
 

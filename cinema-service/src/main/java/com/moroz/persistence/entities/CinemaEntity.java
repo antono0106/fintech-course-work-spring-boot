@@ -2,24 +2,34 @@ package com.moroz.persistence.entities;
 
 import lombok.*;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Entity
 @Table(name = "cinema")
-@AllArgsConstructor
 @NoArgsConstructor
 @Data
-public class CinemaEntity extends AbstractEntity {
+public class CinemaEntity {
+
+    @Getter
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "c_id")
+    private Long cId;
+
     @Column(name = "name", nullable = false, unique = true)
     private String name;
 
     @Column(name = "rows_amount")
     private int rowsAmount;
 
-    @Column(name = "places_per_rows_amount")
+    @Column(name = "places_per_row_amount")
     private int placesPerRowAmount;
+
+    public CinemaEntity(String name, int rowsAmount, int placesPerRowAmount) {
+        this.name = name;
+        this.rowsAmount = rowsAmount;
+        this.placesPerRowAmount = placesPerRowAmount;
+    }
 
     public CinemaEntity(String name) {
         this.name = name;
