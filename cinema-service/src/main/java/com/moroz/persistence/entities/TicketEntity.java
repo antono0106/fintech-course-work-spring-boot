@@ -1,9 +1,7 @@
 package com.moroz.persistence.entities;
 
-import com.moroz.persistence.enums.TicketStatus;
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
@@ -26,8 +24,9 @@ public class TicketEntity extends AbstractEntity {
     @Column(name = "place", nullable = false)
     private int place;
 
-    @Column(name = "status_id", nullable = false)
-    private TicketStatus ticketStatus;
+    @ManyToOne
+    @JoinColumn(name = "status_id")
+    private TicketStatusEntity ticketStatusEntity;
 
     @Column(name = "creation_date", nullable = false)
     private LocalDateTime creationDate;
@@ -38,11 +37,11 @@ public class TicketEntity extends AbstractEntity {
     @Column(name = "payment_id")
     private Long paymentId;
 
-    public TicketEntity(MovieShowEntity movieShowEntity, int row, int place) {
+    public TicketEntity(MovieShowEntity movieShowEntity, int row, int place, TicketStatusEntity ticketStatusEntity) {
         this.movieShowEntity = movieShowEntity;
         this.row = row;
         this.place = place;
-        this.ticketStatus = TicketStatus.NEW;
+        this.ticketStatusEntity = ticketStatusEntity;
         this.creationDate = LocalDateTime.now();
         this.modificationDate = LocalDateTime.now();
         this.paymentId = null;
