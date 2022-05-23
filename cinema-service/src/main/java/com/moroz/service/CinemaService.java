@@ -88,7 +88,7 @@ public class CinemaService {
         log.info("Deleted entity " + entity);
     }
 
-    public void deleteMovieById(Long id) {
+    public void deleteCinemaById(Long id) {
         CinemaEntity entity = cinemaRepository.findById(id)
                 .orElseThrow(() -> new CinemaNotFoundException("Cinema not found"));
         cinemaRepository.delete(entity);

@@ -1,14 +1,16 @@
 package com.moroz.service;
 
-import com.moroz.exceptions.*;
+import com.moroz.exceptions.MovieShowNotFoundException;
+import com.moroz.exceptions.OccupiedRowAndPlaceException;
+import com.moroz.exceptions.TicketNotFoundException;
 import com.moroz.model.TicketDTO;
 import com.moroz.parsers.TicketEntityToDTOParser;
-import com.moroz.persistence.entities.MovieEntity;
 import com.moroz.persistence.entities.MovieShowEntity;
 import com.moroz.persistence.entities.TicketEntity;
-import com.moroz.persistence.enums.TicketStatus;
 import com.moroz.persistence.repo.TicketRepository;
+import com.moroz.persistence.repo.TicketStatusRepository;
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -22,34 +24,26 @@ import java.util.List;
 @Slf4j
 @AllArgsConstructor
 public class TicketService {
-
+    @Getter
     private TicketRepository ticketRepository;
 
     private final MovieShowService movieShowService;
+    private final TicketStatusService ticketStatusService;
 
     public List<TicketDTO> getTickets() {
         List<TicketEntity> entities = ticketRepository.findAll();
 
         List<TicketDTO> dtoList = new ArrayList<>();
 
-        entities.forEach(x -> dtoList.add(new TicketDTO(x.getMovieShowEntity().getId(), x.getRow(), x.getPlace(),
-                x.getTicketStatus().getId(), x.getCreationDate(), x.getModificationDate(), x.getPaymentId())));
-
+        entities.forEach(x -> dtoList.add(TicketEntityToDTOParser.parse(x)));
 
         log.info("Found all tickets");
 
         return dtoList;
     }
 
-    public List<TicketDTO> getTicketsByStatus(TicketStatus ticketStatus) {
-        List<TicketEntity> entities = ticketRepository.findAllByTicketStatus(ticketStatus);
-
-        List<TicketDTO> dtoList = new ArrayList<>();
-
-        entities.forEach(x -> dtoList.add(new TicketDTO(x.getMovieShowEntity().getId(), x.getRow(), x.getPlace(),
-                x.getTicketStatus().getId(), x.getCreationDate(), x.getModificationDate(), x.getPaymentId())));
-
-        return dtoList;
+    public List<TicketEntity> getNewTickets() {
+        return ticketRepository.findAllByTicketStatusEntity(ticketStatusService.getStatusByName("NEW"));
     }
 
     public TicketDTO getTicketById(Long id) {
@@ -65,7 +59,7 @@ public class TicketService {
         MovieShowEntity movieShowEntity = movieShowService.getMovieShowRepository().findById(movieShowId)
                 .orElseThrow(() -> new MovieShowNotFoundException("Movie show not found"));
 
-        TicketEntity ticketEntity = new TicketEntity(movieShowEntity, row, place);
+        TicketEntity ticketEntity = new TicketEntity(movieShowEntity, row, place, ticketStatusService.getStatusByName("NEW"));
 
         if (ticketEntity
                 .equals(ticketRepository.findByMovieShowEntityAndRowAndPlace(movieShowEntity, row, place).get())) {
@@ -81,14 +75,24 @@ public class TicketService {
         return TicketEntityToDTOParser.parse(ticketEntity);
     }
 
-    public TicketDTO updateTicket(Long movieShowId, int row, int place, TicketStatus ticketStatus) {
+    public void updateNewTickets() {
+        List<TicketEntity> newEntities = ticketRepository.findAllByTicketStatusEntity(
+                ticketStatusService.getStatusByName("NEW")
+        );
+
+        for (TicketEntity entity: newEntities) {
+
+        }
+    }
+
+    public TicketDTO updateTicket(Long movieShowId, int row, int place, String ticketStatusName) {
         MovieShowEntity movieShowEntity = movieShowService.getMovieShowRepository().findById(movieShowId)
                 .orElseThrow(() -> new MovieShowNotFoundException("Movie Show not found"));
 
         TicketEntity ticketEntity = ticketRepository.findByMovieShowEntityAndRowAndPlace(movieShowEntity, row, place)
                 .orElseThrow(() -> new TicketNotFoundException("Ticket not found"));
 
-        ticketEntity.setTicketStatus(ticketStatus);
+        ticketEntity.setTicketStatusEntity(ticketStatusService.getStatusByName(ticketStatusName));
         ticketEntity.setModificationDate(LocalDateTime.now());
 
         ticketRepository.save(ticketEntity);

@@ -30,9 +30,7 @@ public class MovieController {
 
     @PostMapping(path = "/delete/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity deleteMovieById(@PathVariable(value = "id") Long id) {
-
-            movieService.deleteMovieById(id);
-            return new ResponseEntity(id, HttpStatus.OK);
-
+        movieService.deleteMovieById(id);
+        return new ResponseEntity(id, HttpStatus.OK);
     }
 }

@@ -31,11 +31,7 @@ public class MovieShowController {
 
     @PostMapping(path = "/delete/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Long> deleteMovieShowById(@PathVariable(value = "id") Long id) {
-        try {
-            movieShowService.deleteMovieShowById(id);
-            return new ResponseEntity<Long>(id, HttpStatus.OK);
-        } catch (UserNotFoundException e) {
-            return new ResponseEntity<Long>(id, HttpStatus.BAD_REQUEST);
-        }
+        movieShowService.deleteMovieShowById(id);
+        return new ResponseEntity<Long>(id, HttpStatus.OK);
     }
 }
