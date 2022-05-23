@@ -1,6 +1,7 @@
 package com.moroz.controllers;
 
 import com.moroz.exceptions.UserNotFoundException;
+import com.moroz.model.PaymentIdDTO;
 import com.moroz.model.TicketDTO;
 import com.moroz.service.TicketService;
 import lombok.AllArgsConstructor;
@@ -29,8 +30,12 @@ public class TicketController {
     @PostMapping("/create-ticket")
     public TicketDTO createTicket(@RequestBody TicketDTO ticketDTO) {
         TicketDTO dto = ticketService.addTicket(ticketDTO.getMovieShowId(), ticketDTO.getRow(), ticketDTO.getPlace());
-        restTemplate.postForObject("http://localhost:8080/api/v1/");
         return dto;
+    }
+
+    @PostMapping(path = "/set-payment-id/", produces = MediaType.APPLICATION_JSON_VALUE)
+    public TicketDTO setPaymentId(@RequestBody PaymentIdDTO paymentIdDTO) {
+        return ticketService.setPaymentId(paymentIdDTO.getTicketId(), paymentIdDTO.getPaymentId());
     }
 
     @PostMapping(path ="/delete/{id}", produces = MediaType.APPLICATION_JSON_VALUE)

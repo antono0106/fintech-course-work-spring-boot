@@ -18,4 +18,13 @@ public class PaymentDTO {
     private String card;
 
     private Long statusId;
+
+    private Long ticketId;
+
+    public PaymentDTO(Long id, int amount, String card, Long statusId) {
+        this.id = id;
+        this.amount = amount;
+        this.card = card;
+        this.statusId = statusId;
+    }
 }

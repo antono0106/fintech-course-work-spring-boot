@@ -1,17 +1,11 @@
-package com.moroz.processor;
+package com.moroz.service.processor;
 
-import com.moroz.persistence.entities.TicketEntity;
-import com.moroz.persistence.entities.TicketStatusEntity;
 import com.moroz.service.TicketService;
-import com.moroz.service.TicketStatusService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
-
-import java.time.LocalDateTime;
-import java.util.List;
 
 @Service
 @AllArgsConstructor

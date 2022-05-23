@@ -79,6 +79,8 @@ public class TicketService {
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("amount", new Random().nextInt(300 - 50) + 50);
         jsonObject.put("card", RandomCreditCardNumberGenerator.getRandomCard());
+        jsonObject.put("ticketId", ticketRepository.findAll().get(ticketRepository.findAll().size() - 1).getId());
+
 
         restTemplate.postForObject("http://localhost:8081/api/v1/add-payment", jsonObject, String.class);
 
@@ -87,14 +89,15 @@ public class TicketService {
         return TicketEntityToDTOParser.parse(ticketEntity);
     }
 
-    public void updateNewTickets() {
-        List<TicketEntity> newEntities = ticketRepository.findAllByTicketStatusEntity(
-                ticketStatusService.getStatusByName("NEW")
-        );
+    public TicketDTO setPaymentId(Long ticketId, Long paymentId) {
+        TicketEntity entity = ticketRepository.findById(ticketId)
+                .orElseThrow(() -> new TicketNotFoundException("Ticket not found"));
 
-        for (TicketEntity entity: newEntities) {
+        entity.setPaymentId(paymentId);
 
-        }
+        ticketRepository.save(entity);
+
+        return TicketEntityToDTOParser.parse(entity);
     }
 
     public TicketDTO updateTicket(Long movieShowId, int row, int place, String ticketStatusName) {
