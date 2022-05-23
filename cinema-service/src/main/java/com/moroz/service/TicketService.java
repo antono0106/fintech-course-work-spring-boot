@@ -1,5 +1,6 @@
 package com.moroz.service;
 
+import com.moroz.cardgenerator.RandomCreditCardNumberGenerator;
 import com.moroz.exceptions.MovieShowNotFoundException;
 import com.moroz.exceptions.OccupiedRowAndPlaceException;
 import com.moroz.exceptions.TicketNotFoundException;
@@ -12,12 +13,15 @@ import com.moroz.persistence.repo.TicketStatusRepository;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
+import net.minidev.json.JSONObject;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
 import javax.transaction.Transactional;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 @Service
 @Transactional
@@ -29,6 +33,8 @@ public class TicketService {
 
     private final MovieShowService movieShowService;
     private final TicketStatusService ticketStatusService;
+
+    private final RestTemplate restTemplate = new RestTemplate();
 
     public List<TicketDTO> getTickets() {
         List<TicketEntity> entities = ticketRepository.findAll();
@@ -69,6 +75,12 @@ public class TicketService {
 
         ticketRepository.insertTicket(ticketEntity.getMovieShowEntity().getId(),
                 ticketEntity.getRow(), ticketEntity.getPlace());
+
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("amount", new Random().nextInt(300 - 50) + 50);
+        jsonObject.put("card", RandomCreditCardNumberGenerator.getRandomCard());
+
+        restTemplate.postForObject("http://localhost:8081/api/v1/add-payment", jsonObject, String.class);
 
         log.info("Saved " + ticketEntity);
 
