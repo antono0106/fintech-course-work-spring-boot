@@ -48,8 +48,8 @@ public class TicketService {
         return dtoList;
     }
 
-    public List<TicketEntity> getNewTickets() {
-        return ticketRepository.findAllByTicketStatusEntity(ticketStatusService.getStatusByName("NEW"));
+    public List<TicketEntity> getProcessingTickets() {
+        return ticketRepository.findAllByTicketStatusEntity(ticketStatusService.getStatusByName("PROCESSING"));
     }
 
     public TicketDTO getTicketById(Long id) {
@@ -76,10 +76,14 @@ public class TicketService {
         ticketRepository.insertTicket(ticketEntity.getMovieShowEntity().getId(),
                 ticketEntity.getRow(), ticketEntity.getPlace());
 
+        ticketEntity.setTicketStatusEntity(ticketStatusService.getStatusByName("PROCESSING"));
+
+        TicketEntity newTicketEntity = ticketRepository.save(ticketEntity);
+
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("amount", new Random().nextInt(300 - 50) + 50);
         jsonObject.put("card", RandomCreditCardNumberGenerator.getRandomCard());
-        jsonObject.put("ticketId", ticketRepository.findAll().get(ticketRepository.findAll().size() - 1).getId());
+        jsonObject.put("ticketId", newTicketEntity.getId());
 
 
         restTemplate.postForObject("http://localhost:8081/api/v1/add-payment", jsonObject, String.class);
@@ -110,11 +114,11 @@ public class TicketService {
         ticketEntity.setTicketStatusEntity(ticketStatusService.getStatusByName(ticketStatusName));
         ticketEntity.setModificationDate(LocalDateTime.now());
 
-        ticketRepository.save(ticketEntity);
+        TicketEntity newTicketEntity = ticketRepository.save(ticketEntity);
 
         log.info("Updated " + ticketEntity);
 
-        return TicketEntityToDTOParser.parse(ticketEntity);
+        return TicketEntityToDTOParser.parse(newTicketEntity);
     }
 
     public void deleteTicketById(Long id) {
