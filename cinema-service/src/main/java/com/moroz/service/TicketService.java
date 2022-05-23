@@ -10,6 +10,7 @@ import com.moroz.persistence.entities.TicketEntity;
 import com.moroz.persistence.repo.TicketRepository;
 import com.moroz.persistence.repo.TicketStatusRepository;
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -23,11 +24,11 @@ import java.util.List;
 @Slf4j
 @AllArgsConstructor
 public class TicketService {
-
+    @Getter
     private TicketRepository ticketRepository;
-    private TicketStatusRepository ticketStatusRepository;
 
     private final MovieShowService movieShowService;
+    private final TicketStatusService ticketStatusService;
 
     public List<TicketDTO> getTickets() {
         List<TicketEntity> entities = ticketRepository.findAll();
@@ -41,16 +42,8 @@ public class TicketService {
         return dtoList;
     }
 
-    public List<TicketDTO> getTicketsByStatusName(String ticketStatusName) {
-
-        List<TicketEntity> entities = ticketRepository
-                .findAllByTicketStatus(ticketStatusRepository.findByName(ticketStatusName).get());
-
-        List<TicketDTO> dtoList = new ArrayList<>();
-
-        entities.forEach(x -> dtoList.add(TicketEntityToDTOParser.parse(x)));
-
-        return dtoList;
+    public List<TicketEntity> getNewTickets() {
+        return ticketRepository.findAllByTicketStatusEntity(ticketStatusService.getStatusByName("NEW"));
     }
 
     public TicketDTO getTicketById(Long id) {
@@ -66,7 +59,7 @@ public class TicketService {
         MovieShowEntity movieShowEntity = movieShowService.getMovieShowRepository().findById(movieShowId)
                 .orElseThrow(() -> new MovieShowNotFoundException("Movie show not found"));
 
-        TicketEntity ticketEntity = new TicketEntity(movieShowEntity, row, place, ticketStatusRepository.findByName("NEW").get());
+        TicketEntity ticketEntity = new TicketEntity(movieShowEntity, row, place, ticketStatusService.getStatusByName("NEW"));
 
         if (ticketEntity
                 .equals(ticketRepository.findByMovieShowEntityAndRowAndPlace(movieShowEntity, row, place).get())) {
@@ -82,6 +75,16 @@ public class TicketService {
         return TicketEntityToDTOParser.parse(ticketEntity);
     }
 
+    public void updateNewTickets() {
+        List<TicketEntity> newEntities = ticketRepository.findAllByTicketStatusEntity(
+                ticketStatusService.getStatusByName("NEW")
+        );
+
+        for (TicketEntity entity: newEntities) {
+
+        }
+    }
+
     public TicketDTO updateTicket(Long movieShowId, int row, int place, String ticketStatusName) {
         MovieShowEntity movieShowEntity = movieShowService.getMovieShowRepository().findById(movieShowId)
                 .orElseThrow(() -> new MovieShowNotFoundException("Movie Show not found"));
@@ -89,7 +92,7 @@ public class TicketService {
         TicketEntity ticketEntity = ticketRepository.findByMovieShowEntityAndRowAndPlace(movieShowEntity, row, place)
                 .orElseThrow(() -> new TicketNotFoundException("Ticket not found"));
 
-        ticketEntity.setTicketStatusEntity(ticketStatusRepository.findByName(ticketStatusName).get());
+        ticketEntity.setTicketStatusEntity(ticketStatusService.getStatusByName(ticketStatusName));
         ticketEntity.setModificationDate(LocalDateTime.now());
 
         ticketRepository.save(ticketEntity);

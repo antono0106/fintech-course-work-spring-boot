@@ -33,11 +33,7 @@ public class UserController {
 
     @PostMapping(path = "/delete/{emailphonenumber}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> deleteUserById(@PathVariable(value = "emailphonenumber") String emailPhoneNumber) {
-        try {
-            userService.deleteUserByEmailPhoneNumber(emailPhoneNumber);
-            return new ResponseEntity<String>(emailPhoneNumber, HttpStatus.OK);
-        } catch (UserNotFoundException e) {
-            return new ResponseEntity<String>(emailPhoneNumber, HttpStatus.BAD_REQUEST);
-        }
+        userService.deleteUserByEmailPhoneNumber(emailPhoneNumber);
+        return new ResponseEntity<String>(emailPhoneNumber, HttpStatus.OK);
     }
 }

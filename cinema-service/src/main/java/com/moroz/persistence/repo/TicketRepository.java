@@ -21,5 +21,5 @@ public interface TicketRepository extends JpaRepository<TicketEntity, Long> {
 
     Optional<TicketEntity> findByMovieShowEntityAndRowAndPlace(MovieShowEntity movieShowEntity, int row, int place);
 
-    List<TicketEntity> findAllByTicketStatus(TicketStatusEntity ticketStatusEntity);
+    List<TicketEntity> findAllByTicketStatusEntity(TicketStatusEntity ticketStatusEntity);
 }
