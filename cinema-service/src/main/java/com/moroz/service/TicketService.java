@@ -14,6 +14,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import net.minidev.json.JSONObject;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -67,30 +69,31 @@ public class TicketService {
 
         TicketEntity ticketEntity = new TicketEntity(movieShowEntity, row, place, ticketStatusService.getStatusByName("NEW"));
 
-        if (ticketEntity
-                .equals(ticketRepository.findByMovieShowEntityAndRowAndPlace(movieShowEntity, row, place).get())) {
-            log.error("Place and row already occupied", new OccupiedRowAndPlaceException());
-            throw new OccupiedRowAndPlaceException("Place and row already occupied");
+        if (row == 0 || place == 0
+                || row > movieShowEntity.getCinemaEntity().getRowsAmount()
+                || place > movieShowEntity.getCinemaEntity().getPlacesPerRowAmount()) {
+            throw new RuntimeException("Wrong value of row and place");
         }
+
+        ticketRepository.findByMovieShowEntityAndRowAndPlace(movieShowEntity, row, place)
+                .ifPresent(val -> {
+                    throw new OccupiedRowAndPlaceException("Place and row already Occupied");
+                });
+
 
         ticketRepository.insertTicket(ticketEntity.getMovieShowEntity().getId(),
                 ticketEntity.getRow(), ticketEntity.getPlace());
 
-        ticketEntity.setTicketStatusEntity(ticketStatusService.getStatusByName("PROCESSING"));
+        TicketEntity newTicketEntity = ticketRepository.findByMovieShowEntityAndRowAndPlace(movieShowEntity, row, place).orElseThrow();
 
-        TicketEntity newTicketEntity = ticketRepository.save(ticketEntity);
+        newTicketEntity.setTicketStatusEntity(ticketStatusService.getStatusByName("PROCESSING"));
+        newTicketEntity.setModificationDate(LocalDateTime.now());
 
-        JSONObject jsonObject = new JSONObject();
-        jsonObject.put("amount", new Random().nextInt(300 - 50) + 50);
-        jsonObject.put("card", RandomCreditCardNumberGenerator.getRandomCard());
-        jsonObject.put("ticketId", newTicketEntity.getId());
+        ticketRepository.save(newTicketEntity);
 
+        log.info("Saved " + newTicketEntity);
 
-        restTemplate.postForObject("http://localhost:8081/api/v1/add-payment", jsonObject, String.class);
-
-        log.info("Saved " + ticketEntity);
-
-        return TicketEntityToDTOParser.parse(ticketEntity);
+        return TicketEntityToDTOParser.parse(newTicketEntity);
     }
 
     public TicketDTO setPaymentId(Long ticketId, Long paymentId) {
@@ -100,6 +103,8 @@ public class TicketService {
         entity.setPaymentId(paymentId);
 
         ticketRepository.save(entity);
+
+
 
         return TicketEntityToDTOParser.parse(entity);
     }
@@ -120,6 +125,10 @@ public class TicketService {
 
         return TicketEntityToDTOParser.parse(newTicketEntity);
     }
+
+    /*public TicketDTO receivePaymentStatusAndUpdateTicketStatus(JSONObject jsonObject) {
+
+    }*/
 
     public void deleteTicketById(Long id) {
         TicketEntity entity = ticketRepository.findById(id)

@@ -14,6 +14,8 @@ import java.time.LocalDateTime;
 @ToString
 public class TicketDTO {
 
+    private Long id;
+
     private Long movieShowId;
 
     private int row;

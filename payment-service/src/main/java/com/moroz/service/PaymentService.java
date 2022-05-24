@@ -48,18 +48,15 @@ public class PaymentService {
 
         PaymentEntity newPaymentEntity = paymentRepository.save(paymentEntity);
 
-        JSONObject jsonObject = new JSONObject();
-
-        jsonObject.put("ticketId", ticketId);
-        jsonObject.put("paymentId", newPaymentEntity.getId());
-
-        restTemplate.postForObject("http://localhost:8080/api/v1/tickets/set-payment-id/", jsonObject, String.class);
-
         return PaymentEntityToDTOParser.parse(newPaymentEntity);
     }
 
-    public PaymentDTO getPaymentById(Long id) {
+    public JSONObject getPaymentStatusByPaymentId(Long id) {
         PaymentEntity paymentEntity = paymentRepository.findById(id).orElseThrow(() -> new PaymentNotFoundException("Payment not found"));
-        return PaymentEntityToDTOParser.parse(paymentEntity);
+
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("name", paymentEntity.getPaymentStatus().getName());
+
+        return jsonObject;
     }
 }
