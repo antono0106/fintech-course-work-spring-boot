@@ -24,6 +24,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -51,7 +52,10 @@ public class TicketService {
     }
 
     public List<TicketEntity> getProcessingTickets() {
-        return ticketRepository.findAllByTicketStatusEntity(ticketStatusService.getStatusByName("PROCESSING"));
+        return ticketRepository.findAllByTicketStatusEntity(ticketStatusService.getStatusByName("PROCESSING"))
+                .stream()
+                .filter(x -> x.getPaymentId() != null)
+                .collect(Collectors.toList());
     }
 
     public TicketDTO getTicketById(Long id) {

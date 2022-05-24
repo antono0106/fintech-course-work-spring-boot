@@ -26,10 +26,10 @@ public class PaymentStatusProcessor {
     }
 
     @Async
-    @Scheduled(fixedRate = 5000)
+    @Scheduled(fixedRate = 2000)
     public void updatePayments() {
         for (PaymentEntity entity : paymentService.getNewPayments()) {
-            entity.setPaymentStatus(paymentStatusService.getStatuses().get((Math.random() <= 0.5) ? 2 : 3));
+            entity.setPaymentStatus(paymentStatusService.getStatuses().get((Math.random() <= 0.5) ? 1 : 2));
             paymentService.getPaymentRepository().save(entity);
         }
     }

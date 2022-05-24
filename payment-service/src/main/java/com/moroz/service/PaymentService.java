@@ -10,6 +10,7 @@ import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import net.minidev.json.JSONObject;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.client.RestTemplate;
 
 import javax.transaction.Transactional;
@@ -40,7 +41,7 @@ public class PaymentService {
     }
 
     public List<PaymentEntity> getNewPayments() {
-        return paymentRepository.findAllByPaymentStatus(1L);
+        return paymentRepository.findAllByPaymentStatus(paymentStatusService.getStatusByName("NEW"));
     }
 
     public PaymentDTO addPayment(int amount, String card, Long ticketId) {
@@ -51,12 +52,8 @@ public class PaymentService {
         return PaymentEntityToDTOParser.parse(newPaymentEntity);
     }
 
-    public JSONObject getPaymentStatusByPaymentId(Long id) {
+    public String getPaymentStatusByPaymentId(Long id) {
         PaymentEntity paymentEntity = paymentRepository.findById(id).orElseThrow(() -> new PaymentNotFoundException("Payment not found"));
-
-        JSONObject jsonObject = new JSONObject();
-        jsonObject.put("name", paymentEntity.getPaymentStatus().getName());
-
-        return jsonObject;
+        return paymentEntity.getPaymentStatus().getName();
     }
 }

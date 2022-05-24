@@ -39,7 +39,7 @@ public class PaymentController {
     }
 
     @GetMapping(path = "/get-payment-status/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public JSONObject getPaymentById(@PathVariable(value = "id") Long id) {
+    public String getPaymentById(@PathVariable(value = "id") Long id) {
         return paymentService.getPaymentStatusByPaymentId(id);
     }
 }
